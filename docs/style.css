@@ -696,3 +696,58 @@ svg { overflow: visible; }
 }
 
 /* (Animations removed per user request) */
+
+/* --- Metallic Leaderboard Ranks --- */
+.metal-row td {
+  position: relative;
+  overflow: hidden;
+  color: #111 !important;
+  text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
+  z-index: 1;
+}
+
+.metal-row td > * {
+  position: relative;
+  z-index: 2;
+}
+
+.metal-gold td {
+  background: linear-gradient(to bottom, #f9f0ce 0%, #e2c057 50%, #d4af37 51%, #f6e27a 100%);
+  border-top: 2px solid #f9f0ce;
+  border-bottom: 2px solid #b38f00;
+}
+
+.metal-silver td {
+  background: linear-gradient(to bottom, #fcfcfc 0%, #d4d4d4 50%, #c0c0c0 51%, #e6e6e6 100%);
+  border-top: 2px solid #fcfcfc;
+  border-bottom: 2px solid #a3a3a3;
+}
+
+.metal-bronze td {
+  background: linear-gradient(to bottom, #f4d0b5 0%, #d38f5f 50%, #cd7f32 51%, #e8a97b 100%);
+  border-top: 2px solid #f4d0b5;
+  border-bottom: 2px solid #a05a22;
+}
+
+/* Light Reflection Sweep (Ripples across cells) */
+.metal-row td::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -150%;
+  width: 150%; height: 100%;
+  background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-25deg);
+  animation: metal-shine 4s infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+.metal-row td:nth-child(1)::after { animation-delay: 0s; }
+.metal-row td:nth-child(2)::after { animation-delay: 0.1s; }
+.metal-row td:nth-child(3)::after { animation-delay: 0.2s; }
+.metal-row td:nth-child(4)::after { animation-delay: 0.3s; }
+
+@keyframes metal-shine {
+  0% { left: -150%; }
+  25% { left: 200%; }
+  100% { left: 200%; }
+}

@@ -572,8 +572,14 @@ function renderLeaderboard() {
 
   list.sort((a, b) => b.goals - a.goals);
 
-  tbody.innerHTML = list.map((item, idx) => `
-    <tr class="sketch-row" onclick="openPlayerModal('${item.player_id}')">
+  tbody.innerHTML = list.map((item, idx) => {
+    let rowClass = "sketch-row";
+    if (idx === 0) rowClass += " metal-row metal-gold";
+    else if (idx === 1) rowClass += " metal-row metal-silver";
+    else if (idx === 2) rowClass += " metal-row metal-bronze";
+
+    return `
+    <tr class="${rowClass}" onclick="openPlayerModal('${item.player_id}')">
       <td style="font-family: system-ui, -apple-system, sans-serif; font-weight: bold;">
         ${idx === 0 ? '<span class="rank-highlight">#1</span>' : `#${idx + 1}`}
       </td>
@@ -581,7 +587,8 @@ function renderLeaderboard() {
       <td style="text-align:right; font-family: system-ui, -apple-system, sans-serif; font-weight:bold; color: var(--pencil-blue);">${item.goals}</td>
       <td style="text-align:right; font-family: var(--font-hand); color:var(--pencil-light);">${item.avg}</td>
     </tr>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // --- Player Detail Modal ---
