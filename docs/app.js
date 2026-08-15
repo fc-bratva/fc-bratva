@@ -229,6 +229,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupSearch();
   setupFilterControls();
 
+  // Scroll transparency for nav-bar
+  let scrollTimeout;
+  const navBar = document.querySelector('.nav-bar');
+  window.addEventListener('scroll', () => {
+    if (navBar) {
+      navBar.classList.add('scrolling');
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        navBar.classList.remove('scrolling');
+      }, 250);
+    }
+  });
+
   await loadData();
   renderAll();
 });
@@ -452,16 +465,23 @@ function renderDashboard() {
   const sortedPlayers = [...state.players].sort((a, b) => getPlayerGoals(b) - getPlayerGoals(a));
   const top3 = sortedPlayers.slice(0, 3);
 
-  topTbody.innerHTML = top3.map((p, idx) => `
-    <tr class="sketch-row" onclick="openPlayerModal('${p.player_id}')">
+  topTbody.innerHTML = top3.map((p, idx) => {
+    let rowClass = "sketch-row";
+    if (idx === 0) rowClass += " metal-row metal-gold";
+    else if (idx === 1) rowClass += " metal-row metal-silver";
+    else if (idx === 2) rowClass += " metal-row metal-bronze";
+
+    return `
+    <tr class="${rowClass}" onclick="openPlayerModal('${p.player_id}')">
       <td style="font-family: system-ui, -apple-system, sans-serif; font-weight: bold;">
-        ${idx === 0 ? '<span class="rank-highlight">#1</span>' : `#${idx + 1}`}
+        #${idx + 1}
       </td>
       <td class="username">${escapeHTML(p.display_name)}</td>
       <td style="text-align:right; font-weight:bold; font-family: system-ui, -apple-system, sans-serif; color: var(--pencil-blue);">${getPlayerGoals(p)}</td>
       <td style="text-align:right; color:var(--pencil-light);">${p.matches ? p.matches.length : 0}</td>
     </tr>
-  `).join('');
+    `;
+  }).join('');
 
   // Flagged Section
   const flaggedBox = document.getElementById('flagged-card-box');
@@ -581,7 +601,7 @@ function renderLeaderboard() {
     return `
     <tr class="${rowClass}" onclick="openPlayerModal('${item.player_id}')">
       <td style="font-family: system-ui, -apple-system, sans-serif; font-weight: bold;">
-        ${idx === 0 ? '<span class="rank-highlight">#1</span>' : `#${idx + 1}`}
+        #${idx + 1}
       </td>
       <td class="username">${escapeHTML(item.display_name)}</td>
       <td style="text-align:right; font-family: system-ui, -apple-system, sans-serif; font-weight:bold; color: var(--pencil-blue);">${item.goals}</td>
