@@ -215,6 +215,15 @@ const tabsOrder = ['dashboard', 'tournaments', 'players', 'leaderboard'];
 
 // --- Initialization ---
 document.addEventListener('DOMContentLoaded', async () => {
+  const initialLang = autoDetectLanguage();
+  setLanguage(initialLang);
+  
+  // Update lang selector UI to match auto-detected lang
+  document.querySelectorAll('.lang-opt').forEach(opt => {
+    if(opt.dataset.lang === initialLang) opt.classList.add('active');
+    else opt.classList.remove('active');
+  });
+
   setupLanguageSelector();
   setupNavigation();
   setupSearch();
@@ -247,9 +256,28 @@ function setupLanguageSelector() {
   });
 }
 
+function autoDetectLanguage() {
+  const saved = localStorage.getItem('fcm_lang');
+  if (saved && I18N[saved]) return saved;
+
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+  // Morocco timezone overrides to English
+  if (tz.includes('Casablanca') || tz.includes('El_Aaiun') || tz.includes('Morocco')) {
+    return 'en';
+  }
+
+  const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
+  if (browserLang.startsWith('ar')) return 'ar';
+  if (browserLang.startsWith('ru')) return 'ru';
+  if (browserLang.startsWith('es')) return 'es';
+  
+  return 'en';
+}
+
 function setLanguage(langCode) {
   if (!I18N[langCode]) return;
   state.lang = langCode;
+  localStorage.setItem('fcm_lang', langCode);
   const dict = I18N[langCode];
 
   document.documentElement.setAttribute('dir', dict.dir);
