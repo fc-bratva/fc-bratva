@@ -45,8 +45,8 @@ html[lang="ar"] {
   --font-formal: 'Aref Ruqaa', serif;
 }
 html[lang="ru"] {
-  --font-hand: 'Caveat', cursive; /* Caveat supports Cyrillic */
-  --font-formal: 'Caveat', cursive;
+  --font-hand: 'Pangolin', cursive; /* Looks like Patrick Hand for Cyrillic */
+  --font-formal: 'Neucha', cursive; /* Looks like Architects Daughter for Cyrillic */
 }
 
 html {
